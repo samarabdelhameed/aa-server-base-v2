@@ -1,11 +1,188 @@
----
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Passkey demo</title>
+    <style>
+      body {
+        background-color: #f9fafb;
+        color: #1e1e1e;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: auto;
+        padding: 2rem;
+      }
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
----
+      h1 {
+        font-size: 2.25rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+      }
 
-<Layout>
-	<Welcome />
-</Layout>
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 0.5rem;
+        color: #111827;
+      }
+
+      form {
+        margin-top: 1rem;
+      }
+
+      label {
+        font-size: 0.95rem;
+        font-weight: 500;
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      button {
+        background-color: #4f46e5;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #4338ca;
+      }
+
+      #clear-db-button {
+        background-color: #ef4444;
+      }
+
+      #clear-db-button:hover {
+        background-color: #dc2626;
+      }
+
+      #status {
+        margin-top: 1rem;
+        font-weight: 500;
+      }
+
+      table {
+        width: 100%;
+        margin-top: 1rem;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+
+      th, td {
+        border: 1px solid #e5e7eb;
+        padding: 0.5rem 0.75rem;
+        text-align: left;
+        word-break: break-word;
+      }
+
+      p {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Passkey demo</h1>
+
+    <h2>Sign up</h2>
+    <form id="signup-form">
+      <label for="username">Username</label>
+      <input id="username" name="username" placeholder="Enter username" />
+      <button>Sign up with passkeys</button>
+    </form>
+
+    <h2>Sign in</h2>
+    <form id="login-form">
+      <button>Sign in with passkeys</button>
+    </form>
+
+    <p id="status">Not signed in.</p>
+
+    <h2>Stored users</h2>
+    <p>Credential IDs and public keys are encoded in base64url.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Credential ID</th>
+          <th>Public key</th>
+        </tr>
+      </thead>
+      <tbody id="stored-users-tbody"></tbody>
+    </table>
+    <button id="clear-db-button">Clear local storage</button>
+    <p>Make sure to clear your passkeys stored in your device as well.</p>
+  </body>
+</html>
+
+<script>
+  import { signIn, signUp } from "../utils/auth";
+  import { db } from "../utils/db";
+
+  const signupForm = document.getElementById("signup-form") as HTMLFormElement;
+  const loginForm = document.getElementById("login-form") as HTMLFormElement;
+  const statusParagraph = document.getElementById("status") as HTMLParagraphElement;
+  const clearDatabaseButton = document.getElementById("clear-db-button") as HTMLButtonElement;
+  const storedUsersTableBody = document.getElementById("stored-users-tbody") as HTMLTableSectionElement;
+
+  signupForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(signupForm);
+    const username = formData.get("username");
+    if (typeof username !== "string" || username.length < 1) return;
+    const user = await signUp(username);
+    statusParagraph.textContent = `You're signed in as ${user.username} (user ID: ${user.userId}).`;
+  });
+
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = await signIn();
+    statusParagraph.textContent = `You're signed in as ${user.username} (user ID: ${user.userId}).`;
+  });
+
+  clearDatabaseButton.addEventListener("click", () => {
+    db.clear();
+  });
+
+  displayDatabase(db);
+  db.onUpdate(displayDatabase);
+
+  function displayDatabase(currentDb) {
+    for (const child of storedUsersTableBody.children) {
+      child.remove();
+    }
+    for (const entry of currentDb.entries()) {
+      const rowElement = document.createElement("tr");
+      rowElement.append(createTableDataCell(entry.id));
+      rowElement.append(createTableDataCell(entry.username));
+      rowElement.append(createTableDataCell(entry.credential_id));
+      rowElement.append(createTableDataCell(entry.public_key));
+      storedUsersTableBody.append(rowElement);
+    }
+  }
+
+  function createTableDataCell(value) {
+    const codeElement = document.createElement("code");
+    codeElement.textContent = value;
+    const tableDataCellElement = document.createElement("td");
+    tableDataCellElement.append(codeElement);
+    return tableDataCellElement;
+  }
+</script>
