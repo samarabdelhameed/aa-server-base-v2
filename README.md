@@ -1,13 +1,13 @@
-# 🌟 AA Server Base - Astro + Bun Project Starter
+# 🌐 AA Server Base — Astro + Bun Starter Template
 
-This project is based on Astro Starter Kit using Bun as the JavaScript runtime.  
-It includes a basic structure for building fast and modern websites.
+A minimal and blazing-fast starter template built with **Astro** and powered by **Bun** runtime.  
+Designed for developers who want to quickly scaffold secure, scalable, and stylish web applications with modern tooling.
 
 ---
 
-## 🚀 How to Start
+## 🚀 Getting Started
 
-Use this command to create your project using Astro + Bun with the minimal template:
+Use the following command to initialize your project with Astro + Bun using the minimal template:
 
 ```bash
 bun create astro@latest -- --template minimal
@@ -17,58 +17,58 @@ bun create astro@latest -- --template minimal
 
 ## 📁 Project Structure
 
-Your Astro project structure should look like this:
-
-```text
+```txt
 /
-├── public/
+├── public/               # Static assets
 │   └── favicon.svg
-├── src/
-│   ├── layouts/
+├── src/                  # Main source folder
+│   ├── layouts/          # Shared layouts (e.g., main layout)
 │   │   └── Layout.astro
-│   └── pages/
+│   └── pages/            # Page components (route-based)
 │       └── index.astro
-├── .vscode/
+├── .vscode/              # Editor config (optional)
 ├── .gitignore
-├── astro.config.mjs
-├── bun.lockb
+├── astro.config.mjs      # Astro configuration
+├── bun.lockb             # Bun lockfile
 ├── package.json
-├── tsconfig.json
+├── tsconfig.json         # TypeScript settings
 └── README.md
 ```
 
-✅ **Important Notes:**
-
-- Don't push `node_modules/` to GitHub ❌
-- Your repo root should **not** have extra folders like `aa-server-v0` wrapping everything
-- You should run all commands from the **project root**
-- Make sure `.DS_Store` is excluded in `.gitignore` on Mac
-
----
-
-## 🧞 Bun Dev Commands
-
-| Command               | Description                                            |
-| --------------------- | ------------------------------------------------------ |
-| `bun install`         | Install project dependencies                           |
-| `bun dev`             | Start the local development server at `localhost:4321` |
-| `bun run build`       | Build the project for production into `./dist/`        |
-| `bun run preview`     | Preview the build locally                              |
-| `bun astro add`       | Add integrations like `tailwind`, `vercel`, etc.       |
-| `bun astro -- --help` | Get help about available Astro CLI options             |
+> ✅ **Notes**
+>
+> - Avoid committing `node_modules/` or `.DS_Store` files
+> - Keep the project root clean (don’t nest inside another folder)
+> - Always run commands from the project root
 
 ---
 
-## 🌐 Astro Docs
+## 🧪 Bun Dev Commands
 
-- [Astro Documentation](https://docs.astro.build)
-- [Astro Discord](https://astro.build/chat)
-- [Bun Documentation](https://bun.sh/docs)
+| Command               | Description                                                          |
+| --------------------- | -------------------------------------------------------------------- |
+| `bun install`         | Install dependencies                                                 |
+| `bun dev`             | Launch local dev server at [`localhost:4321`](http://localhost:4321) |
+| `bun run build`       | Build the project for production in `./dist/`                        |
+| `bun run preview`     | Preview the production build locally                                 |
+| `bun astro add`       | Add integrations like TailwindCSS, Vercel, etc.                      |
+| `bun astro -- --help` | Show available Astro CLI commands                                    |
 
 ---
 
-> 💡 Built with ❤️ using Astro and Bun by [Samar Abdelhameed](https://github.com/samarabdelhameed)
+## 📚 Useful Resources
 
-```
+- 📘 [Astro Documentation](https://docs.astro.build)
+- 💬 [Astro Discord](https://astro.build/chat)
+- ⚡ [Bun Documentation](https://bun.sh/docs)
 
-```
+---
+
+## 🛠️ About
+
+This template was crafted and extended with passion by [**Samar Abdelhameed**](https://github.com/samarabdelhameed).  
+Feel free to fork, improve, and build something amazing 🚀
+
+---
+
+> Built with ❤️ using Astro & Bun
